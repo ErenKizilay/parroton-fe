@@ -1,18 +1,30 @@
-import { Stack } from "@mui/material";
+import React from "react";
 import { useActionQuery } from "../hooks/hook";
-import { Action, TestCase } from "../types/models";
-import ActionComponent from "./Action";
-
+import { TestCase } from "../types/models";
+import DataLoaderComponent from "./DataLoaderComponent";
+import ActionCard from "./ActionCard";
+import { Collapse, Typography } from "antd";
+import ActionContainer from "./ActionContainer";
 
 export interface Props {
-    actions: Action[]
+    testCase: TestCase
 }
 
-
-export default function ActionList({ actions }: Props) {
+export default function ActionList({ testCase }: Props) {
+    const {data, isLoading, error} = useActionQuery({
+        test_case_id: testCase.id
+    });
+    const render = ():React.ReactNode => {
+        const items = data?.items.map(i => {
+            return {
+                key: i.id,
+                label: <ActionCard action={i}/>,
+                children: <ActionContainer action={i}/>
+            }
+        });
+        return <Collapse items={items}/>
+    }
     return <>
-    <Stack width={"%100"}>
-        {actions?.map(a => <ActionComponent key={a.id} action={a}/>)}
-    </Stack>
+    <DataLoaderComponent isLoading={isLoading} error={error} render={render}/>
     </>
 }

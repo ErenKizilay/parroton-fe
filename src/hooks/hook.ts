@@ -1,13 +1,18 @@
 import { useMutation, useQuery, UseQueryOptions } from "react-query";
-import { Action, ActionExecution, AuthProvider, Parameter, ParameterIn, ParameterType, Run, TestCase } from "../types/models";
+import { Action, ActionExecution, ActionExecutionPair, AuthProvider, Parameter, ParameterIn, ParameterType, Run, TestCase } from "../types/models";
 import axiosInstance from "../utils/axios";
 
-export const queryTestCases = async (customer_id: String): Promise<TestCase[]> => {
+export interface QueryResult<T> {
+    items: T[],
+    next_page_key: string | null
+}
+
+export const queryTestCases = async (customer_id: String): Promise<QueryResult<TestCase>> => {
     const response = await axiosInstance.get("/test-cases");
     return response.data;
 };
 
-export const queryAuthProviders = async (customer_id: String, test_case_id: String | null): Promise<AuthProvider[]> => {
+export const queryAuthProviders = async (customer_id: String, test_case_id: String | null): Promise<QueryResult<AuthProvider>> => {
     const response = await axiosInstance.get(`/auth-providers${test_case_id ? `?test_case_id=${test_case_id}` : ''}`);
     return response.data;
 };
@@ -22,15 +27,13 @@ export const queryRun = async (test_case_id: String, run_id: String): Promise<Ru
     return response.data;
 };
 
-export const queryRuns = async (test_case_id: String): Promise<Run[]> => {
+export const queryRuns = async (test_case_id: String): Promise<QueryResult<Run>> => {
     const response = await axiosInstance.get(`/test-cases/${test_case_id}/runs`);
     return response.data;
 };
 
-export const queryActionExecutions = async (test_case_id: String, run_id: String): Promise<ActionExecution[]> => {
-    console.log("exec before in: {}, {}", test_case_id, run_id)
+export const queryActionExecutions = async (test_case_id: String, run_id: String): Promise<ActionExecutionPair[]> => {
     const response = await axiosInstance.get(`/test-cases/${test_case_id}/runs/${run_id}/action-executions`);
-    console.log("exec inner: {}", response.data)
     return response.data;
 };
 
@@ -53,7 +56,7 @@ export const mutateTestCase = async (formData: FormData): Promise<void> => {
     return response.data;
 };
 
-export const queryActions = async (query: ActionQuery): Promise<Action[]> => {
+export const queryActions = async (query: ActionQuery): Promise<QueryResult<Action>> => {
     const response = await axiosInstance.get(`/test-cases/${query.test_case_id}/actions`, {
         params: {
             name: query.name,
@@ -63,7 +66,7 @@ export const queryActions = async (query: ActionQuery): Promise<Action[]> => {
     return response.data;
 };
 
-export const queryParameters = async (query: ParameterQuery): Promise<Parameter[]> => {
+export const queryParameters = async (query: ParameterQuery): Promise<QueryResult<Parameter>> => {
     const response = await axiosInstance.get(`/test-cases/${query.test_case_id}/actions/${query.action_id}/parameters`, {
         params: {
             path: query.path,
@@ -115,15 +118,13 @@ export const useRunsQuery = (test_case_id: String) => {
 }
 
 export const useActionQuery = (action_query: ActionQuery) => {
-    return useQuery<Action[]>(["actions", action_query.test_case_id], () => queryActions(action_query));
+    return useQuery<QueryResult<Action>>(["actions", action_query.test_case_id], () => queryActions(action_query));
 }
 
 export const useParameterQuery = (parameter_query: ParameterQuery) => {
     const key = `${parameter_query.test_case_id}_${parameter_query.action_id}_${parameter_query.parameter_type}_${parameter_query.parameter_in}_${parameter_query.path}`
-    return useQuery<Parameter[]>(["parameters", key], () => queryParameters(parameter_query), {
-        onError: (error) => console.error("Failed to fetch todos:", error),
-        placeholderData: [],
-        initialData: []
+    return useQuery<QueryResult<Parameter>>(["parameters", key], () => queryParameters(parameter_query), {
+        onError: (error) => console.error("Failed to fetch todos:", error)
     });
 }
 
