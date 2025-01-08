@@ -3,10 +3,11 @@ import { useState } from "react";
 
 interface CodeComponentProps {
     data: any;
+    onEdit?: (value: string) =>
 }
 
 const CodeComponent: React.FC<CodeComponentProps> = ({
-    data
+    data, onEdit
 }) => {
     const [expanded, setExpanded] = useState(false);
     const formatData = (input: any): string => {
@@ -29,7 +30,7 @@ const CodeComponent: React.FC<CodeComponentProps> = ({
                 onExpand: (_, info) => setExpanded(info.expanded),
             }}
             copyable
-            editable={{ editing: false, autoSize: { minRows: 1, maxRows: 10 } }}
+            editable={{ editing: onEdit ? true : false, autoSize: { minRows: 1, maxRows: 10 }, onChange: (e) => onEdit ? (e) : '' }}
             style={{
                 whiteSpace: "pre-wrap",
                 fontFamily: "monospace",

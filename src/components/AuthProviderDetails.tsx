@@ -1,5 +1,5 @@
 import { Checkbox, Flex, Table, TableProps, Typography } from "antd";
-import { AuthHeaderValue, AuthProvider } from "../types/models";
+import { AuthProvider } from "../types/models";
 import CodeComponent from "./CodeComponent";
 
 
@@ -14,7 +14,6 @@ interface AuthHeader {
 }
 
 export default function AuthProviderDetails({ authProvider }: Props) {
-    console.log(authProvider)
     const columns: TableProps<AuthHeader>['columns'] = [
         {
             title: 'name',

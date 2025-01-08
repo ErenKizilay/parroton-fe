@@ -66,6 +66,20 @@ export const queryActions = async (query: ActionQuery): Promise<QueryResult<Acti
     return response.data;
 };
 
+export const deleteTestCase = async (id: string): Promise<void> => {
+    return await axiosInstance.delete(`/test-cases/${id}`);
+};
+
+export interface SetAuthHeaderPayload {
+    name: string,
+    value: string
+}
+
+export const setAuthHeader = async (auth_provider_id: string, payload: SetAuthHeaderPayload): Promise<AuthProvider> => {
+    const response = await axiosInstance.patch(`/auth-providers/${auth_provider_id}`, payload);
+    return response.data;
+};
+
 export const queryParameters = async (query: ParameterQuery): Promise<QueryResult<Parameter>> => {
     const response = await axiosInstance.get(`/test-cases/${query.test_case_id}/actions/${query.action_id}/parameters`, {
         params: {
@@ -93,6 +107,10 @@ export const useMutateRun = (test_case_id: String, setFunction: (run: Run) => vo
 
 export const useMutateTestCase = (fromProvider: () => FormData) => {
     return useMutation(() => mutateTestCase(fromProvider()));
+}
+
+export const useDeleteTestCase = (id:string) => {
+    return useMutation(() => deleteTestCase(id));
 }
 
 export const useRunQuery = (test_case_id: String, run_id: String, options?: Omit<UseQueryOptions<Run>, any>) => {
