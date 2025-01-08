@@ -84,6 +84,11 @@ export interface ActionExecution {
     finished_at: string,
 }
 
+export interface ActionExecutionPair {
+    action: Action | null,
+    execution: ActionExecution
+}
+
 
 export interface Action {
      customer_id: string,
