@@ -1,11 +1,16 @@
+import {
+    DeleteTwoTone
+} from '@ant-design/icons';
 import { Button, Card, Flex, message, Popconfirm, Segmented, Typography } from "antd";
 import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import ActionList from "../components/ActionList";
-import AuthProviderList from "../components/AuthProviderList";
-import DataLoaderComponent from "../components/DataLoaderComponent";
-import RunList from "../components/RunList";
-import { useDeleteTestCase, useGetTestCaseQuery } from "../hooks/hook";
+import ActionList from "../action/components/ActionList";
+import AssertionList from "../assertion/components/AssertionList";
+import AuthProviderList from "../auth/components/AuthProviderList";
+import DataLoaderComponent from "../common/components/DataLoaderComponent";
+import RunList from "../run/components/RunList";
+import UpdateTestCase from "../testCase/components/UpdateTestCase";
+import { useDeleteTestCase, useGetTestCaseQuery } from "../testCase/hooks/testCaseHooks";
 
 export default function TestCasePage() {
     const { id } = useParams();
@@ -22,6 +27,8 @@ export default function TestCasePage() {
                 return <AuthProviderList customerId={data?.customer_id!} testCaseId={data?.id!} />
             case "runs":
                 return <RunList testCaseId={data?.id!} />
+            case "assertions":
+                return <AssertionList test_case_id={data?.id!} />
         }
     }
 
@@ -38,17 +45,18 @@ export default function TestCasePage() {
         return <>
             <Flex vertical>
                 <Card loading={isLoading} title={data?.name} extra={
-                    <Popconfirm title={"Delete Test Case"} description={"Are you sure to delete test case?"} onConfirm={() => handleDelete()} okText="Yes"
-                        cancelText="No">
-                        <Button danger>Delete</Button>
-                    </Popconfirm>
-                }>
-                    <Flex gap={2} vertical>
-                        <Typography.Text>{data?.description}</Typography.Text>
-                        <Segmented onChange={(value) => setSegment(value)} options={[{ label: "Actions", value: "actions" }, { label: "Auth Providers", value: "auth" }, { label: "Runs", value: "runs" }]} />
-                        {segmentContent()}
+                    <Flex>
+                        {data ? <UpdateTestCase id={id!} initialName={data?.name} description={data?.description} /> : ''}
+                        <Popconfirm title={"Delete Test Case"} description={"Are you sure to delete test case?"} onConfirm={() => handleDelete()} okText="Yes"
+                            cancelText="No">
+                            <Button icon={<DeleteTwoTone twoToneColor='#eb2f96' />}></Button>
+                        </Popconfirm>
                     </Flex>
+                }>
+                    <Typography.Paragraph>{data?.description}</Typography.Paragraph>
                 </Card>
+                <Segmented onChange={(value) => setSegment(value)} options={[{ label: "Actions", value: "actions" }, { label: "Auth Providers", value: "auth" }, { label: "Runs", value: "runs" }, { label: "Assertions", value: "assertions" }]} />
+                {segmentContent()}
             </Flex>
         </>
     }
