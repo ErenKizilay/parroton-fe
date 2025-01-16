@@ -1,20 +1,12 @@
 import { ConfigProvider } from 'antd';
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
+import AuthProviderList from './auth/components/AuthProviderList';
+import UploadHar from './common/components/UploadHar';
 import './index.css';
 import MainLayout from './layout/MainLayout';
 import TestCaseListPage from './pages/TestCaseListPage';
 import TestCasePage from './pages/TestCasePage';
-import UploadHar from './components/UploadHar';
-
-const items = [{
-  key: "test-cases",
-  label: `Test Cases`,
-},
-{
-  key: "test",
-  label: `Test`,
-}];
 
 const App: React.FC = () => {
   return (
@@ -23,9 +15,11 @@ const App: React.FC = () => {
         <MainLayout />
         <React.Fragment>
           <Routes>
-            <Route path='upload' element={<UploadHar/>}/>
+            <Route path='/upload' element={<UploadHar />} />
             <Route path='/test-cases' element={<TestCaseListPage></TestCaseListPage>} />
-            <Route path='test-cases/:id' element={<TestCasePage />} />
+            <Route path='/auth-providers' element={<AuthProviderList customerId={'eren'} testCaseId={null} />} />
+            <Route path='/test-cases/:id' element={<TestCasePage />} />
+
           </Routes>
         </React.Fragment>
       </ConfigProvider>

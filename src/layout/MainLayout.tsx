@@ -14,6 +14,10 @@ const items = [
     label: `Upload`,
   },
   {
+    key: "auth-providers",
+    label: `Auth Providers`,
+  },
+  {
     key: "test",
     label: `Test`,
   }];
