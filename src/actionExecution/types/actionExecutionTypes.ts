@@ -12,8 +12,10 @@ export interface ActionExecution {
     request_body: any | null,
     response_body: any | null,
     query_params: [][],
-    started_at: string,
-    finished_at: string,
+    started_at: number,
+    finished_at: number,
+    created_at: number,
+    updated_at: number | undefined,
 }
 
 export interface ActionExecutionPair {

@@ -1,4 +1,5 @@
 import { Result, Skeleton } from "antd";
+import { ResultStatusType, ExceptionStatusType } from "antd/es/result";
 import { AxiosError } from "axios";
 import React from "react";
 
@@ -14,11 +15,16 @@ interface ErrorResponse {
 }
 
 export default function DataLoaderComponent({ isLoading, error, errorResultTitle, render }: DataLoaderProps) {
+
+    const errorStatus = (axiosError: AxiosError): ResultStatusType => {
+        if(axiosError.status && [403,404,500].includes(axiosError.status)) {
+            return axiosError.status as ExceptionStatusType
+        }
+        return "error"
+    }
     const content = (): React.ReactNode => {
         if (isLoading) {
-            return <Skeleton>
-
-            </Skeleton>
+            return <Skeleton></Skeleton>
         }
         if (error) {
             let errorMessage;
@@ -28,7 +34,7 @@ export default function DataLoaderComponent({ isLoading, error, errorResultTitle
                 errorMessage = new String(error)
             }
             return <Result
-                status="error"
+                status={ error instanceof AxiosError ? errorStatus(error): "error"}
                 title={errorResultTitle ? errorResultTitle : 'Could not load data!'}
                 subTitle={errorMessage}
             />

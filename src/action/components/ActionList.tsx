@@ -22,7 +22,7 @@ export default function ActionList({ testCase }: Props) {
                 children: <ActionContainer action={i} />
             }
         });
-        return <Collapse items={items} />
+        return <Collapse size="large" items={items} />
     }
     return <>
         <DataLoaderComponent isLoading={isLoading} error={error} render={render} />

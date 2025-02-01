@@ -11,9 +11,10 @@ export interface InlineEditProps {
     beforeEdit: React.ReactNode,
     whiledEditing: React.ReactNode,
     mutationFunction: MutationFunction,
+    onCancel: () => void
 }
 
-export default function InlineEditComponent({beforeEdit, whiledEditing, mutationFunction}: InlineEditProps) {
+export default function InlineEditComponent({beforeEdit, whiledEditing, mutationFunction, onCancel}: InlineEditProps) {
     const[editing, setEditing] = useState(false);
     const mutateHook = useMutation(mutationFunction, {
         onSuccess() {
@@ -30,7 +31,10 @@ export default function InlineEditComponent({beforeEdit, whiledEditing, mutation
             return <Flex>
                 {whiledEditing}
                 <Button icon={<CheckCircleOutlined />} onClick={(e) => {mutateHook.mutate([])}}/>
-                <Button icon={<CloseCircleOutlined />} onClick={(e) => {setEditing(false)}}/>
+                <Button icon={<CloseCircleOutlined />} onClick={(e) => {
+                    setEditing(false);
+                    onCancel();
+                }}/>
             </Flex>
         } else {
             return <Flex>

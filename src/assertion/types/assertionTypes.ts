@@ -38,6 +38,8 @@ export interface Assertion {
     right: AssertionItem,
     comparison_type: ComparisonType,
     negate: boolean,
+    created_at: number,
+    updated_at: number | undefined,
 }
 
 export interface AssertionResult {

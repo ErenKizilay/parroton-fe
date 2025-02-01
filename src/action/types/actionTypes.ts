@@ -8,4 +8,6 @@ export interface Action {
     name: string,
     mime_type: string,
     method: string,
+    created_at: number,
+    updated_at: number | undefined,
 }

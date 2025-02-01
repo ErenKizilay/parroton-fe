@@ -3,17 +3,21 @@ import { Button, Col, Divider, Empty, Flex, Form, GetProp, Input, Row, Select, S
 import { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../../utils/axios';
+import { useAuthProvidersQueryWithUrls } from '../../auth/hooks/hooks';
 
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
 
 export default function UploadHar() {
     const [urls, setUrls] = useState<string[]>([]);
+    const [authProviders, setAuthProviders] = useState<string[]>([]);
     const [exclusions, setExclusions] = useState<string>("");
+    const [uploadError, setUploadError] = useState();
     const [name, setName] = useState<string>("");
     const [description, setDescription] = useState<string>("");
     const [fileList, setFileList] = useState<UploadFile[]>([]);
     const [uploading, setUploading] = useState(false);
     const [options, setOptions] = useState<SelectProps['options']>([]);
+    const {data, isLoading, error} = useAuthProvidersQueryWithUrls(urls.map(u => new URL(u).origin))
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -42,7 +46,9 @@ export default function UploadHar() {
     }
 
 
+
     const handleUpload = () => {
+        setUploadError(undefined);
         const formData = new FormData();
         fileList.forEach((file) => {
             formData.append('file', file as FileType);
@@ -50,11 +56,15 @@ export default function UploadHar() {
         formData.append('name', name);
         formData.append('description', description);
         formData.append("excluded_paths", exclusions)
+        formData.append("auth_providers", authProviders.join(","))
         setUploading(true);
 
         axiosInstance.postForm("/test-cases", formData)
             .then((res) => {
                 navigate(`/test-cases/`)
+            }).catch((e) => {
+                setUploading(false);
+                setUploadError(e);
             })
     };
 
@@ -93,7 +103,7 @@ export default function UploadHar() {
                     <Form.Item label="Description" required>
                         <Input.TextArea onChange={(e) => setDescription(e.target.value)}></Input.TextArea>
                     </Form.Item>
-                    <Form.Item label="Har file" required>
+                    <Form.Item label="HAR file" required>
                         <Upload {...props}>
                             <button style={{ border: 0, background: 'none' }} type="button">
                                 <PlusOutlined />
@@ -102,12 +112,18 @@ export default function UploadHar() {
                         </Upload>
                     </Form.Item>
                     <Form.Item label="Exclusions">
-                        <Input onChange={(e) => setExclusions(e.target.value)}></Input>
-                    </Form.Item>
-                    <Form.Item label="Exclusions2">
                         <Select mode="multiple" options={options} onChange={(value: string | string[]) => {
                             setExclusions(Array.isArray(value) ? value.join(", ") : value);
                         }} />
+                    </Form.Item>
+                    <Form.Item label="Auth Providers">
+                        <Select mode="multiple" onChange={(val) => setAuthProviders(val)} loading={isLoading} options={data?.map(a => {
+                            let option = {
+                                label: a.base_url,
+                                value: a.id,
+                            };
+                            return option;
+                        })}/>
                     </Form.Item>
                     <Form.Item label={null}>
                         <Button
@@ -119,6 +135,7 @@ export default function UploadHar() {
                         >
                             {uploading ? 'Uploading' : 'Start Upload'}
                         </Button>
+                        {uploadError ? <Typography.Text>{uploadError}</Typography.Text>: ''}
                     </Form.Item>
                 </Form>
             </Flex>

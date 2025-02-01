@@ -11,9 +11,11 @@ export const queryAutoComplete = async (query: AutoCompleteQuery): Promise<strin
     return response.data;
 };
 
-export const useAutoCompleteQuery = (query: AutoCompleteQuery, options?: Omit<UseQueryOptions<string[]>, any>) => {
+export const useAutoCompleteQuery = (query: AutoCompleteQuery) => {
     const key = `${query.test_case_id}_${query.test_case_id}_${query.latest_input}`
-    return useQuery<string[]>(["auto-complete", key], () => queryAutoComplete(query), options);
+    return useQuery<string[]>(["auto-complete", key], () => queryAutoComplete(query), {
+        enabled: query.latest_input.length > 0
+    });
 }
 
 export interface AutoCompleteQuery {

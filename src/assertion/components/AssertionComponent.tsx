@@ -35,7 +35,7 @@ export default function AssertionComponent({ test_case_id, assertion }: Assertio
             }
         }}>Delete</Button>
     ]}>
-        <Flex gap={3} align="center" justify="space-between">
+        <Flex gap={3} align="center" justify="space-around">
             <AssertionItemComponent customer_id={"eren"} test_case_id={test_case_id} item={assertion.left} asserton_id={assertion.id} left_or_right={"left"} />
             <AssertionItemComponent customer_id={"eren"} test_case_id={test_case_id} item={assertion.right} asserton_id={assertion.id} left_or_right={"right"} />
         </Flex>

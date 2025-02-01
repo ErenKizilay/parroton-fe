@@ -11,7 +11,9 @@ export interface Run {
     test_case_id: string,
     id: string,
     status: RunStatus,
-    started_at: string,
-    finished_at: string | null,
-    assertion_results: AssertionResult[] | null
+    started_at: number,
+    finished_at: number | undefined,
+    assertion_results: AssertionResult[] | null,
+    created_at: number,
+    updated_at: number | undefined,
 }

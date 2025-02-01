@@ -8,7 +8,7 @@ export interface TestCaseCarProps {
 
 export default function TestCaseCard({ testCase, onClick }: TestCaseCarProps) {
     return <>
-        <Card style={{
+        <Card id={testCase.id} style={{
             minWidth: "400px",
             maxWidth: "400px",
         }} hoverable title={testCase.name}
