@@ -19,7 +19,7 @@ export default function AssertionList({ test_case_id }: AssertionListProps) {
                 children: <AssertionComponent key={a.id} test_case_id={test_case_id} assertion={a} />
             }
         });
-        return <Collapse items={items} />
+        return <Collapse size="large" items={items} />
     }
 
     return <DataLoaderComponent isLoading={isLoading} error={error} render={assertions} />

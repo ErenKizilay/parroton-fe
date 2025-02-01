@@ -7,11 +7,11 @@ import { AuthProvider } from "..";
 import CodeComponent2 from "../../common/components/CodeComponent2";
 import InlineEditComponent from "../../common/components/InlineEditComponent";
 import { setAuthHeader, setAuthHeaderEnablement, useDeleteAuthProvider } from "../hooks/hooks";
+import AddAuthHeader from './AddAuthHeader';
 
 
 export interface Props {
     authProvider: AuthProvider,
-    deleted: (id: string) => void
 }
 
 interface AuthHeader {
@@ -21,7 +21,7 @@ interface AuthHeader {
     index: number
 }
 
-export default function AuthProviderDetails({ authProvider, deleted }: Props) {
+export default function AuthProviderDetails({ authProvider }: Props) {
     const deleteHook = useDeleteAuthProvider(authProvider.id);
     const [value, setValue] = useState("");
     const [headers, setHeaders] = useState<AuthHeader[]>(() =>
@@ -57,11 +57,6 @@ export default function AuthProviderDetails({ authProvider, deleted }: Props) {
 
     const handleDelete = () => {
         deleteHook.mutate();
-        if (deleteHook.isError) {
-            message.error(new String(deleteHook.error));
-        } else {
-            deleted(authProvider.id)
-        }
     }
 
     const headersContent = (): React.ReactNode => {
@@ -74,24 +69,30 @@ export default function AuthProviderDetails({ authProvider, deleted }: Props) {
                     </Checkbox>
                 </Flex>
                 <Divider />
-                <InlineEditComponent beforeEdit={<CodeComponent2 data={h.value} />}
-                    whiledEditing={<Input.TextArea defaultValue={h.value} onChange={(e) => setValue(e.target.value)}></Input.TextArea>}
-                    mutationFunction={() => {
-                        handleUpdate(i, "value", value);
-                        return Promise.resolve();
-                    }} />
+                <InlineEditComponent beforeEdit={<CodeComponent2 data={h.value} copyable={false} />}
+                whiledEditing={<Input.TextArea defaultValue={h.value} onChange={(e) => setValue(e.target.value)}></Input.TextArea>}
+                mutationFunction={() => {
+                    handleUpdate(i, "value", value);
+                    return Promise.resolve();
+                } } onCancel={() => {
+                    setValue(h.value);
+                }} />
             </Card>)}
         </Flex>
     }
 
     return <Flex vertical>
-        <Card title={"Headers"} extra={
+        <Card title={<Typography.Text code copyable>{authProvider.base_url}</Typography.Text>} extra={
+            [<AddAuthHeader auth_provider_id={authProvider.id} />,
             <Popconfirm title={"Delete Auth Provider"} description={"Are you sure to delete?"} onConfirm={() => handleDelete()} okText="Yes"
                 cancelText="No">
                 <Button icon={<DeleteTwoTone twoToneColor='#eb2f96' />}></Button>
-            </Popconfirm>
+            </Popconfirm>]
+
         }>
-            {headersContent()}
+            <Flex vertical>
+                {headersContent()}
+            </Flex>
         </Card>
     </Flex>
 

@@ -3,6 +3,7 @@ import { DefaultOptionType } from "antd/es/select";
 import React, { useState } from "react";
 import { useAutoCompleteQuery } from "../hooks/commonHooks";
 import InlineEditComponent from "./InlineEditComponent";
+import CodeComponent2 from "./CodeComponent2";
 
 export interface ExpressionProps {
     customer_id: string,
@@ -20,8 +21,6 @@ export default function ExpressionComponent({ customer_id, test_case_id, action_
         test_case_id: test_case_id,
         source_action_order: action_order,
         latest_input: searchText
-    }, {
-        enable: searchText.length > 0
     });
 
     const options = (): DefaultOptionType[] => {
@@ -48,13 +47,13 @@ export default function ExpressionComponent({ customer_id, test_case_id, action_
     }
 
     const beforeEdit = (): React.ReactNode => {
-        return <Typography.Text code editable={false}>{input ? input : `- `}</Typography.Text>
+        return <CodeComponent2 data={input ? input : `-`} copyable={false}/>
     }
 
     return <>
         {onSave ? <InlineEditComponent beforeEdit={beforeEdit()} whiledEditing={autoComplete()} mutationFunction={function (): Promise<unknown> {
-                return onSave!(input);
-            }} />: beforeEdit()
+            return onSave!(input);
+        } } onCancel={() => {setInput(initialInput)}} />: beforeEdit()
             }
 
     </>

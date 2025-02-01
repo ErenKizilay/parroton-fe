@@ -1,20 +1,25 @@
-
-import { Flex, Input, Typography } from 'antd';
+import { Empty, Flex, Typography } from "antd";
 import { useState } from "react";
-
-const { TextArea } = Input;
 
 interface CodeComponentProps2 {
     data: any;
+    copyable?: boolean;
 }
 
 const CodeComponent2: React.FC<CodeComponentProps2> = ({
-    data
+    data,
+    copyable = true,
 }) => {
     const [expanded, setExpanded] = useState(false);
+
     const formatData = (input: any): string => {
         if (typeof input === "string") {
-            return input;
+            return input.startsWith("$.")
+                ? input
+                      .split(".")
+                      .map((part, i) => (i % 2 === 0 && i !== 0 ? `\n\t${part}` : part))
+                      .join(".")
+                : input;
         }
         try {
             return JSON.stringify(input, null, 2);
@@ -24,31 +29,37 @@ const CodeComponent2: React.FC<CodeComponentProps2> = ({
     };
 
     const codeTextAreaStyles: React.CSSProperties = {
-        fontFamily: `"Fira Code", "Courier New", Courier, monospace`, // Monospaced font for JSON readability
-        backgroundColor: "#f5f5f5", // Light grey background for better contrast
-        color: "#333", // Darker text for improved readability
-        fontWeight: "bold", // Bold text for emphasis
-        border: "1px solid #d9d9d9", // Subtle border
-        borderRadius: "4px", // Rounded corners
-        padding: "10px", // Padding for readability
-        lineHeight: "1.6", // Increased line spacing for JSON formatting
-        whiteSpace: "pre-wrap", // Preserve whitespace and wrap long lines
-        wordWrap: "break-word", // Wrap text instead of horizontal scrolling
-        resize: "none", // Disable manual resizing,
-        width: "100%", // Take full width of the container
-        maxWidth: "1500px", // Limit the width to prevent overflow,
-        flex: 1
+        fontFamily: `"Fira Code", "Courier New", Courier, monospace`, 
+        fontSize: "14px", // Readable code size
+        backgroundColor: "#e0e0e0", // Light gray background
+        color: "#000", // Black text for strong contrast
+        fontWeight: "bold", // Make text bold
+        border: "1px solid #bdbdbd", // Softer border for a cleaner look
+        borderRadius: "6px", // Slightly rounded corners
+        padding: "12px", // Spacing for better readability
+        lineHeight: "1.6",
+        whiteSpace: "pre", // Preserve code formatting
+        wordBreak: "break-word",
+        overflowX: "auto", // Enable horizontal scrolling
+        overflowY: "auto", // Enable vertical scrolling if needed
+        maxWidth: "100%",
+        width: "100%",
+        minWidth: "100px",
+        maxHeight: expanded ? "none" : "400px", // Expand when needed
+        boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)", // Subtle shadow
+        cursor: "text", // Use text cursor
     };
 
     return (
-        <Flex flex={1}>
-            <Typography.Paragraph 
-            ellipsis={{  
-                expandable: "collapsible",
-                expanded,
-                onExpand: (_, info) => setExpanded(info.expanded),
-                rows: 10
-            }} copyable style={codeTextAreaStyles}>{formatData(data)}</Typography.Paragraph>
+        data === '-' ? '': 
+        <Flex style={{ width: "100%" }}>
+            <Typography.Text
+                copyable={copyable}
+                style={codeTextAreaStyles}
+                onClick={() => setExpanded(!expanded)}
+            >
+                {formatData(data)}
+            </Typography.Text>
         </Flex>
     );
 };

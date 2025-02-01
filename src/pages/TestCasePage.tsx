@@ -24,7 +24,7 @@ export default function TestCasePage() {
             case "actions":
                 return <ActionList testCase={data!} />
             case "auth":
-                return <AuthProviderList customerId={data?.customer_id!} testCaseId={data?.id!} />
+                return data ? <AuthProviderList testCaseId={data.id} /> : '';
             case "runs":
                 return <RunList testCaseId={data?.id!} />
             case "assertions":

@@ -108,6 +108,13 @@ export const updateAssertionExpression = async (test_case_id: String, id: string
     return response.data;
 };
 
+export const updateAssertionFunctionParameterExpression = async (test_case_id: String, id: string, leftOrRight: "left" | "right", param_index: number, expression: string | undefined): Promise<Assertion> => {
+    const response = await axiosInstance.patch(`/test-cases/${test_case_id}/assertions/${id}/${leftOrRight}/function/parameters/${param_index}/expression`, {
+        value: expression
+    });
+    return response.data;
+};
+
 function evictCaches(test_case_id: string, data: Assertion | null) {
     queryClient.invalidateQueries(["assertions", test_case_id]);
     queryClient.invalidateQueries(["assertions-batch-get", test_case_id]);

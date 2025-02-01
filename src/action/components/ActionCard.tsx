@@ -39,7 +39,6 @@ export default function ActionCard({ action }: ActionCardProps) {
         <Flex gap={5}>
             {buildMethod()}
             <Text strong>{action.name}</Text>
-            <Text underline>{action.url}</Text>
         </Flex>
     </>
 }

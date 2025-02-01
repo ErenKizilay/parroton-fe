@@ -22,19 +22,23 @@ export default function RunContainer({ testCaseId, runId }: RunContainerProps) {
     const [actionExecutions, setActionExecutions] = useState<ActionExecutionPair[]>([]);
     const { data: assertionBatch, isLoading: assertionsLoading, error: assertionLoadError } = useBatchAssertionsQuery(testCaseId, run && run.assertion_results ? run.assertion_results.map(a => a.assertion_id) : [])
     const [segment, setSegment] = useState("executions");
-    const { isLoading, error } = useQuery(`${testCaseId}_${runId}_runs`, () => queryRun(testCaseId, runId), {
-        enabled: run === null || (run?.status === RunStatus.InProgress),
-        refetchInterval: 1000,
-        onSuccess(data) {
-            setRun(data);
-        },
-    });
 
-    const { isLoading: execLoads, error: execFetchError } = useQuery(`${testCaseId}_${runId}`, () => queryActionExecutions(testCaseId, runId), {
+    const { isLoading: execLoads, error: execFetchError, refetch: refetchExecs } = useQuery(`${testCaseId}_${runId}`, () => queryActionExecutions(testCaseId, runId), {
         enabled: run !== null && (run?.status === RunStatus.InProgress || actionExecutions.length === 0),
         refetchInterval: 1000,
         onSuccess(data) {
             setActionExecutions(data)
+        },
+    });
+
+    const { isLoading, error } = useQuery(`${testCaseId}_${runId}_runs`, () => queryRun(testCaseId, runId), {
+        enabled: run === null || (run?.status === RunStatus.InProgress),
+        refetchInterval: 2000,
+        onSuccess(data) {
+            setRun(data);
+            if(data.status === RunStatus.Finished) {
+                refetchExecs();
+            }
         },
     });
 
@@ -46,7 +50,7 @@ export default function RunContainer({ testCaseId, runId }: RunContainerProps) {
                 children: <ActionExecutionDetails execution={i.execution} />
             }
         });
-        return <Collapse items={items} />
+        return <Collapse size="large" items={items} />
     }
 
     const assertionResults = (): React.ReactNode => {
@@ -57,7 +61,7 @@ export default function RunContainer({ testCaseId, runId }: RunContainerProps) {
                 children: <AssertionResultComponent key={ar.assertion_id} testCaseId={testCaseId} assertionResult={ar} assertion={assertionBatch?.find(a=>a.id === ar.assertion_id)} />
             }
         });
-        return <Collapse items={items} />
+        return <Collapse size="large" items={items} />
     }
 
 

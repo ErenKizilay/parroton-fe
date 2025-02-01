@@ -27,6 +27,5 @@ export default function ActionExecutionItem({ actionExecution }: ActionExecItemC
         <Badge overflowCount={600} count={execution.status_code} color={color()}></Badge>
         <Typography.Text strong>{action?.name}</Typography.Text>
         <Duration start={execution.started_at} end={execution.finished_at} />
-
     </Flex>
 }

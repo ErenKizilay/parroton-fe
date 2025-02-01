@@ -1,13 +1,16 @@
-import { Empty, Flex, Segmented } from "antd";
+import { Empty, Flex, Segmented, Typography } from "antd";
 import { useState } from "react";
-import { Action } from "../types/actionTypes";
-import ParameterCard from "../../parameter/components/ParameterCard";
 import DataLoaderComponent from "../../common/components/DataLoaderComponent";
 import { ParameterIn, ParameterType, useParameterQuery } from "../../parameter";
+import ParameterCard from "../../parameter/components/ParameterCard";
+import { Action } from "../types/actionTypes";
+import CodeComponent2 from "../../common/components/CodeComponent2";
 
 export interface ActionContainerProps {
     action: Action
 }
+
+const { Text } = Typography;
 
 export default function ActionContainer({ action }: ActionContainerProps) {
     const [parameterType, setParameterType] = useState<ParameterType>(ParameterType.Input);
@@ -21,7 +24,7 @@ export default function ActionContainer({ action }: ActionContainerProps) {
 
     const segmentContent = (): React.ReactNode => {
         return <Flex vertical>
-            {data?.items.length === 0 ? <Empty/> :''}
+            {data?.items.length === 0 ? <Empty /> : ''}
             {data?.items.map(i => {
                 return <ParameterCard key={i.id} action={action} parameter={i} />
             })}
@@ -47,6 +50,7 @@ export default function ActionContainer({ action }: ActionContainerProps) {
 
     return <>
         <Flex vertical>
+            <CodeComponent2 data={action.url}/>
             <Segmented options={["input", "output"]} onChange={(value) => onParameterTypeChange(value)} />
             <Segmented onChange={(value) => onParameterInChange(value)} options={parameterType === ParameterType.Input ? ["body", "param", "header"] : ["body", "header"]} />
             <DataLoaderComponent isLoading={isLoading} error={error} render={segmentContent} />
