@@ -2,8 +2,8 @@ import { PlusOutlined } from '@ant-design/icons';
 import { Button, Col, Divider, Empty, Flex, Form, GetProp, Input, Row, Select, SelectProps, Typography, Upload, UploadFile, UploadProps } from "antd";
 import { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
-import axiosInstance from '../../utils/axios';
 import { useAuthProvidersQueryWithUrls } from '../../auth/hooks/hooks';
+import axiosInstance from '../../utils/axios';
 
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
 
@@ -17,7 +17,7 @@ export default function UploadHar() {
     const [fileList, setFileList] = useState<UploadFile[]>([]);
     const [uploading, setUploading] = useState(false);
     const [options, setOptions] = useState<SelectProps['options']>([]);
-    const {data, isLoading, error} = useAuthProvidersQueryWithUrls(urls.map(u => new URL(u).origin))
+    const { data, isLoading } = useAuthProvidersQueryWithUrls(urls.map(u => new URL(u).origin))
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -60,7 +60,7 @@ export default function UploadHar() {
         setUploading(true);
 
         axiosInstance.postForm("/test-cases", formData)
-            .then((res) => {
+            .then(() => {
                 navigate(`/test-cases/`)
             }).catch((e) => {
                 setUploading(false);
@@ -123,7 +123,7 @@ export default function UploadHar() {
                                 value: a.id,
                             };
                             return option;
-                        })}/>
+                        })} />
                     </Form.Item>
                     <Form.Item label={null}>
                         <Button
@@ -135,7 +135,7 @@ export default function UploadHar() {
                         >
                             {uploading ? 'Uploading' : 'Start Upload'}
                         </Button>
-                        {uploadError ? <Typography.Text>{uploadError}</Typography.Text>: ''}
+                        {uploadError ? <Typography.Text>{uploadError}</Typography.Text> : ''}
                     </Form.Item>
                 </Form>
             </Flex>

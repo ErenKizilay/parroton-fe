@@ -12,7 +12,7 @@ export default function TestCaseCard({ testCase, onClick }: TestCaseCarProps) {
             minWidth: "400px",
             maxWidth: "400px",
         }} hoverable title={testCase.name}
-            onClick={(e) => onClick(testCase)}>
+            onClick={() => onClick(testCase)}>
             <Typography.Text>
                 {testCase.description ? testCase.description : ''}
             </Typography.Text>

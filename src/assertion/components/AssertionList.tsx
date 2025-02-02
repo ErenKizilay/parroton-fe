@@ -1,4 +1,4 @@
-import { Collapse, Flex } from "antd";
+import { Collapse } from "antd";
 import DataLoaderComponent from "../../common/components/DataLoaderComponent";
 import { useAssertionsQuery } from "../hooks/assertionHooks";
 import AssertionComponent from "./AssertionComponent";
@@ -15,7 +15,7 @@ export default function AssertionList({ test_case_id }: AssertionListProps) {
         const items = data?.items.map(a => {
             return {
                 key: a.id,
-                label: <AssertionSummary assertion={a} result={undefined}/>,
+                label: <AssertionSummary assertion={a} result={undefined} />,
                 children: <AssertionComponent key={a.id} test_case_id={test_case_id} assertion={a} />
             }
         });

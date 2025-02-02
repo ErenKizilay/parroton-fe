@@ -30,8 +30,8 @@ export default function InlineEditComponent({beforeEdit, whiledEditing, mutation
         if(editing) {
             return <Flex>
                 {whiledEditing}
-                <Button icon={<CheckCircleOutlined />} onClick={(e) => {mutateHook.mutate([])}}/>
-                <Button icon={<CloseCircleOutlined />} onClick={(e) => {
+                <Button icon={<CheckCircleOutlined />} onClick={() => {mutateHook.mutate([])}}/>
+                <Button icon={<CloseCircleOutlined />} onClick={() => {
                     setEditing(false);
                     onCancel();
                 }}/>
@@ -39,7 +39,7 @@ export default function InlineEditComponent({beforeEdit, whiledEditing, mutation
         } else {
             return <Flex>
                 {beforeEdit}
-                <Button size="small" icon={<EditOutlined/>} onClick={(e) => {setEditing(true)}}/>
+                <Button size="small" icon={<EditOutlined/>} onClick={() => {setEditing(true)}}/>
             </Flex>
         }
     }

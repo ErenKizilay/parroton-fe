@@ -11,7 +11,7 @@ export interface ActionExecution {
     error: string | null,
     request_body: any | null,
     response_body: any | null,
-    query_params: [][],
+    query_params: string[][],
     started_at: number,
     finished_at: number,
     created_at: number,

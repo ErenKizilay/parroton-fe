@@ -1,4 +1,4 @@
-import { AutoComplete, Typography } from "antd";
+import { AutoComplete } from "antd";
 import { DefaultOptionType } from "antd/es/select";
 import React, { useState } from "react";
 import { useAutoCompleteQuery } from "../hooks/commonHooks";
@@ -16,7 +16,7 @@ export interface ExpressionProps {
 export default function ExpressionComponent({ customer_id, test_case_id, action_order, initialInput, onSave }: ExpressionProps) {
     const [input, setInput] = useState<string | undefined>(initialInput);
     const [searchText, setSearchText] = useState('');
-    const { data, isLoading, error } = useAutoCompleteQuery({
+    const { data} = useAutoCompleteQuery({
         customer_id: customer_id,
         test_case_id: test_case_id,
         source_action_order: action_order,

@@ -1,8 +1,8 @@
 import { useMutation, useQuery } from "react-query";
-import axiosInstance from "../../utils/axios";
-import { AuthProvider, CreteAuthProviderPayload } from "../types/authTypes";
 import { QueryResult } from "../../common";
+import axiosInstance from "../../utils/axios";
 import queryClient from "../../utils/query";
+import { AuthProvider, CreteAuthProviderPayload } from "../types/authTypes";
 
 export const deleteAuthProvider = async (id: string): Promise<void> => {
     return await axiosInstance.delete(`/auth-providers/${id}`);
@@ -10,7 +10,7 @@ export const deleteAuthProvider = async (id: string): Promise<void> => {
 
 export const useDeleteAuthProvider = (id: string) => {
     return useMutation(() => deleteAuthProvider(id), {
-        onSuccess(data, variables, context) {
+        onSuccess() {
             invalidateQueries();
         },
     });
@@ -86,10 +86,10 @@ export const queryAuthProvidersWithUrls = async (urls: string[]): Promise<AuthPr
     return response.data;
 };
 
-export const useCreateAuthProvider = (onSuccess: (created:AuthProvider) => void) => {
+export const useCreateAuthProvider = (onSuccess: (created: AuthProvider) => void) => {
     return useMutation({
         mutationFn: (payload: CreteAuthProviderPayload) => createAuthProvider(payload),
-        onSuccess(data, variables, context) {
+        onSuccess(data) {
             invalidateQueries();
             onSuccess(data);
         },
@@ -99,7 +99,7 @@ export const useCreateAuthProvider = (onSuccess: (created:AuthProvider) => void)
 export const useAddAuthHeaderProvider = (auth_provider_id: string) => {
     return useMutation({
         mutationFn: (payload: SetAuthHeaderPayload) => addAuthHeader(auth_provider_id, payload),
-        onSuccess(data, variables, context) {
+        onSuccess() {
             invalidateQueries();
         },
     })
@@ -107,7 +107,7 @@ export const useAddAuthHeaderProvider = (auth_provider_id: string) => {
 
 function invalidateQueries() {
     queryClient.invalidateQueries({
-        predicate: (query) => query.queryKey[0].startsWith('auth'),
+        predicate: (query) => query.queryKey.includes("auth"),
     });
 }
 

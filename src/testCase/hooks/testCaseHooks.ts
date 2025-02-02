@@ -1,9 +1,8 @@
-import { useInfiniteQuery, useMutation, useQuery } from "react-query";
-import axiosInstance from "../../utils/axios";
-import { TestCase } from "../types/testCaseTypes";
+import { useMutation, useQuery } from "react-query";
 import { QueryResult } from "../../common/hooks/commonHooks";
+import axiosInstance from "../../utils/axios";
 import queryClient from "../../utils/query";
-import UpdateTestCase from "../components/UpdateTestCase";
+import { TestCase } from "../types/testCaseTypes";
 
 export const mutateTestCase = async (formData: FormData): Promise<void> => {
     const response = await axiosInstance.post(`/test-cases`, formData, {
@@ -29,11 +28,11 @@ export const updateTestCaseDescription = async (test_case_id: String, descriptio
     return response.data;
 };
 
-export const queryTestCases = async (pageKey: string|null, name: string|null): Promise<QueryResult<TestCase>> => {
+export const queryTestCases = async (pageKey: string | null, name: string | null): Promise<QueryResult<TestCase>> => {
     const response = await axiosInstance.get(`/test-cases`, {
         params: {
             next_page_key: pageKey ? pageKey : undefined,
-            keyword: name ? name: undefined
+            keyword: name ? name : undefined
         }
     });
     return response.data;
@@ -62,7 +61,7 @@ export interface UpdateTestCasePayload {
 }
 
 export const useUpdateTestCase = (id: string) => {
-    return useMutation(({name, description}: UpdateTestCasePayload) => updateTestCase(id, name, description), {
+    return useMutation(({ name, description }: UpdateTestCasePayload) => updateTestCase(id, name, description), {
         onSuccess() {
             queryClient.invalidateQueries(["test_case", id]);
             queryClient.invalidateQueries(["test-cases"]);
@@ -78,7 +77,7 @@ export const useUpdateTestCaseDescription = (id: string, description: string) =>
     });
 }
 
-export const useTestCaseQuery = (keyword:string|null, pageKey:string|null, onSuccess: (queryResult: QueryResult<TestCase>) => void) => {
+export const useTestCaseQuery = (keyword: string | null, pageKey: string | null, onSuccess: (queryResult: QueryResult<TestCase>) => void) => {
     return useQuery(["test-cases", keyword, pageKey], () => queryTestCases(pageKey, keyword), {
         onSuccess(data) {
             onSuccess(data)

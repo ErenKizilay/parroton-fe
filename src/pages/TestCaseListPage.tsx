@@ -32,7 +32,7 @@ export default function TestCaseListPage() {
                 </Typography.Text>
             }
         >
-            <Button onClick={(e) => { navigate("/upload") }} type="primary">Create Now</Button>
+            <Button onClick={() => { navigate("/upload") }} type="primary">Create Now</Button>
         </Empty>
     }
 
@@ -53,7 +53,7 @@ export default function TestCaseListPage() {
     return <Flex vertical gap={3}>
         <Flex gap={5}>
             <Search onChange={(e) => setKeyword(e.target.value)} placeholder="search cases by name" allowClear />
-            <Button type="primary" onClick={(e) => navigate(`/upload`)}>Create new</Button>
+            <Button type="primary" onClick={() => navigate(`/upload`)}>Create new</Button>
         </Flex>
         <PaginationComponent pageKeys={pageKeys} 
         currentPageIndex={currentPageIndex} 
