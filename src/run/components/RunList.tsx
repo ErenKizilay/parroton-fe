@@ -49,7 +49,7 @@ export default function RunList({ testCaseId }: RunListProps) {
     return <Row gutter={6}>
         <Col span={6}>
             <Flex gap={3} vertical>
-                <Button type="primary" icon={<ThunderboltOutlined />} onClick={(e) => {
+                <Button type="primary" icon={<ThunderboltOutlined />} onClick={() => {
                     startRun.mutate();
                 }}>New run</Button>
                 <DataLoaderComponent isLoading={isLoading} error={error} render={runList} />

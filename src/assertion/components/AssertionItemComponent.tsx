@@ -1,6 +1,5 @@
 import { Flex, Radio } from "antd";
 import React, { useState } from "react";
-import { useUpdateAssertionExpression } from "../hooks/assertionHooks";
 import { AssertionItem, Function, Operation, ValueProvider } from "../types/assertionTypes";
 import FunctionComponent from "./FunctionComponent";
 import ValueProviderComponent from "./ValueProviderComponent";
@@ -16,7 +15,6 @@ export interface AssertionItemProps {
 
 export default function AssertionItemComponent({ customer_id, test_case_id, item, left_or_right, asserton_id }: AssertionItemProps) {
     const [tab, setTab] = useState(item.function ? "func" : "exp");
-    const updateExpressionHook = useUpdateAssertionExpression(test_case_id);
 
     const renderFunction = (): React.ReactNode => {
         const assertion_func: Function = item.function ? item.function : {

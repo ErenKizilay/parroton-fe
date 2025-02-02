@@ -65,7 +65,7 @@ const App: React.FC = () => {
           <div style={{ color: '#fff', fontSize: '20px' }}>Parroton</div>
         </Flex>
         <Flex gap={10} justify="flex-end">
-          {items.map(i => <Button variant="solid" icon={i.icon} type="primary" onClick={(e) => navigate(i.key)}>{i.label}</Button>)}
+          {items.map(i => <Button variant="solid" icon={i.icon} type="primary" onClick={() => navigate(i.key)}>{i.label}</Button>)}
         </Flex>
       </Header>
       <Content style={{ padding: '0 48px', margin: 6 }}>
@@ -77,7 +77,7 @@ const App: React.FC = () => {
           <Route path='/test-cases/:id' element={<TestCasePage />} />
         </Routes>
       </Content>
-      
+
     </Layout>
   );
 };

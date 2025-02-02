@@ -6,7 +6,7 @@ export interface AuthProviderCardProps {
     onClick: (id: string) => void
 }
 export default function AuthProviderCard({ authProvider, onClick }: AuthProviderCardProps) {
-    return <Card hoverable onClick={(e) => onClick(authProvider.id)}>
+    return <Card hoverable onClick={() => onClick(authProvider.id)}>
         <Flex vertical>
             <Typography.Text>{authProvider.name}</Typography.Text>
             <Typography.Text>{authProvider.base_url}</Typography.Text>

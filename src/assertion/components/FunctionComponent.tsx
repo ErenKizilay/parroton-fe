@@ -1,17 +1,12 @@
+import {
+    MinusOutlined,
+    PlusOutlined
+} from '@ant-design/icons';
 import { Button, Select } from "antd";
 import Flex from "antd/es/flex";
 import React, { useState } from "react";
 import { Function, Operation } from "../types/assertionTypes";
 import ValueProviderComponent from "./ValueProviderComponent";
-import {
-    HomeOutlined,
-    LoadingOutlined,
-    MinusOutlined,
-    PlusOutlined,
-    SettingFilled,
-    SmileOutlined,
-    SyncOutlined,
-  } from '@ant-design/icons';
 
 
 export interface FunctionCompProp {
@@ -33,23 +28,23 @@ export default function FunctionComponent({ customer_id, test_case_id, assertion
                 assertion_id={assertion_id}
                 left_or_right={left_or_right}
                 value_provider={vp} />
-            <Button icon={<MinusOutlined />} size="small" onClick={(e) => {
+            <Button icon={<MinusOutlined />} size="small" onClick={() => {
                 setParameters((prev) => {
-                    return prev.filter((p, i) => i !== index);
+                    return prev.filter((_p, i) => i !== index);
                 })
-            }}/>
+            }} />
         </Flex>)
     }
 
     const render = (): React.ReactNode => {
         return <Flex vertical gap={2} align="center">
-            <Flex style={{width: "100%"}}>
+            <Flex style={{ width: "100%" }}>
                 <Select value={Operation.Sum} style={{ width: "100%" }} options={[
                     { value: Operation.Sum, label: "Sum" },
                     { value: Operation.Avg, label: "Avarage" },
                     { value: Operation.Count, label: "Count" },
                 ]} />
-                <Button icon={<PlusOutlined />} onClick={(e) => {
+                <Button icon={<PlusOutlined />} onClick={() => {
                     setParameters((prev) => {
                         const newParams = [...prev]
                         newParams.push({
@@ -60,7 +55,7 @@ export default function FunctionComponent({ customer_id, test_case_id, assertion
                         });
                         return newParams;
                     })
-                }}/>
+                }} />
             </Flex>
             <Flex vertical>
                 {paramsContent()}

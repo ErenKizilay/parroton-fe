@@ -39,14 +39,14 @@ export default function AuthProviderDetails({ authProvider }: Props) {
                 name: headers[index].name,
                 value: value
             }).catch((err) => { message.error(new String(err)) })
-                .then((res) => message.success("update completed"));
+                .then(() => message.success("update completed"));
         }
         if (key === "disabled") {
             setAuthHeaderEnablement(authProvider.id, {
                 name: headers[index].name,
                 disabled: value
             }).catch((err) => { message.error(new String(err)) })
-                .then((res) => message.success("update completed"));
+                .then(() => message.success("update completed"));
         }
         setHeaders((prevHeaders) =>
             prevHeaders.map((header) =>

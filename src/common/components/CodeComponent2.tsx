@@ -1,4 +1,4 @@
-import { Empty, Flex, Typography } from "antd";
+import { Flex, Typography } from "antd";
 import { useState } from "react";
 
 interface CodeComponentProps2 {
@@ -16,9 +16,9 @@ const CodeComponent2: React.FC<CodeComponentProps2> = ({
         if (typeof input === "string") {
             return input.startsWith("$.")
                 ? input
-                      .split(".")
-                      .map((part, i) => (i % 2 === 0 && i !== 0 ? `\n\t${part}` : part))
-                      .join(".")
+                    .split(".")
+                    .map((part, i) => (i % 2 === 0 && i !== 0 ? `\n\t${part}` : part))
+                    .join(".")
                 : input;
         }
         try {
@@ -29,7 +29,7 @@ const CodeComponent2: React.FC<CodeComponentProps2> = ({
     };
 
     const codeTextAreaStyles: React.CSSProperties = {
-        fontFamily: `"Fira Code", "Courier New", Courier, monospace`, 
+        fontFamily: `"Fira Code", "Courier New", Courier, monospace`,
         fontSize: "14px", // Readable code size
         backgroundColor: "#e0e0e0", // Light gray background
         color: "#000", // Black text for strong contrast
@@ -51,16 +51,16 @@ const CodeComponent2: React.FC<CodeComponentProps2> = ({
     };
 
     return (
-        data === '-' ? '': 
-        <Flex style={{ width: "100%" }}>
-            <Typography.Text
-                copyable={copyable}
-                style={codeTextAreaStyles}
-                onClick={() => setExpanded(!expanded)}
-            >
-                {formatData(data)}
-            </Typography.Text>
-        </Flex>
+        data === '-' ? '' :
+            <Flex style={{ width: "100%" }}>
+                <Typography.Text
+                    copyable={copyable}
+                    style={codeTextAreaStyles}
+                    onClick={() => setExpanded(!expanded)}
+                >
+                    {formatData(data)}
+                </Typography.Text>
+            </Flex>
     );
 };
 
